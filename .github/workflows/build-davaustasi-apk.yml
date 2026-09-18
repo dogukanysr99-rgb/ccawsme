@@ -1,0 +1,32 @@
+name: Dava Ustası APK Derle
+
+on:
+  push:
+    branches:
+      - claude/merhaba-w2n3j9
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: gradlew çalıştırılabilir yap
+        run: chmod +x gradlew
+
+      - name: Debug APK derle
+        run: ./gradlew :davaustasi:assembleDebug
+
+      - name: APK'yı yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: dava-ustasi-debug-apk
+          path: davaustasi/build/outputs/apk/debug/davaustasi-debug.apk

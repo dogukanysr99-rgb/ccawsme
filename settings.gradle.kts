@@ -14,5 +14,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "EmsalDefteri"
+rootProject.name = "ccawsme"
 include(":app")
+include(":davaustasi")
