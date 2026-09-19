@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "ccawsme"
 include(":app")
 include(":davaustasi")
+include(":sinavhazirlik")

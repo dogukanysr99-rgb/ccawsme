@@ -41,12 +41,31 @@ simülasyonu (Mafia Life tarzı mekaniklerden esinlenilmiştir).
 - İlerleme cihazda (DataStore) saklanır; avatarlar çevrimiçi
   yüklendiği için uygulama internet erişimi ister
 
+### `sinavhazirlik` — Adli Yargı Hazırlık
+
+Adli yargı sınavına hazırlık için modern, aydınlık bir çalışma
+uygulaması.
+
+- **Bilgi kartları**: Konu başına soru/cevap kartları arasında
+  gezinip "Biliyorum" / "Tekrar Et" olarak işaretlersiniz;
+  öğrendiğiniz kartlar konu ilerleme çubuğuna yansır
+- **Mini test**: Çoktan seçmeli sorular, her cevaptan sonra doğru/
+  yanlış renklendirmesi ve kısa açıklama gösterir
+- **Doğru / Yanlış**: Hızlı ifade bazlı quiz, anlık geri bildirim ve
+  açıklama ile
+- **Konular**: Anayasa Hukuku, Medeni Hukuk, Ceza Hukuku (örnek
+  içerik — gerçek ders notlarınızla değiştirilebilir/genişletilebilir)
+- **Panel**: Günlük çalışma serisi (streak), quiz ve doğru/yanlış
+  doğruluk yüzdeleri, konu bazlı ilerleme çubukları
+- Tüm ilerleme cihazda (DataStore) saklanır, internet gerekmez
+
 ## Teknoloji
 
 - Kotlin, Jetpack Compose (Material 3)
 - `app`: Room (yerel veritabanı), Navigation Compose
 - `davaustasi`: DataStore Preferences (oyun durumu kalıcılığı)
-- Her iki modülde de ViewModel + StateFlow (MVVM)
+- `sinavhazirlik`: DataStore Preferences (ilerleme kalıcılığı), Navigation Compose
+- Tüm modüllerde ViewModel + StateFlow (MVVM)
 
 ## Geliştirme ortamı
 
@@ -58,7 +77,7 @@ Projeyi Android Studio ile açıp senkronize ettikten sonra istediğiniz
 modülü (`app` ya da `davaustasi`) doğrudan çalıştırabilirsiniz. Bu proje
 bir sandbox ortamında (Google'ın Maven deposuna ağ erişimi olmadan)
 hazırlandığı için burada `gradlew build` ile derleme doğrulanamadı;
-GitHub Actions üzerindeki "APK Derle" / "Dava Ustası APK Derle"
-workflow'ları her push'ta ilgili modülün debug APK'sını derleyip
-Artifacts olarak yayınlar — telefonunuza kurmak için oradan
-indirebilirsiniz.
+GitHub Actions üzerindeki "APK Derle" / "Dava Ustası APK Derle" /
+"Adli Yargı Hazırlık APK Derle" workflow'ları her push'ta ilgili
+modülün debug APK'sını derleyip Artifacts olarak yayınlar —
+telefonunuza kurmak için oradan indirebilirsiniz.
