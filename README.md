@@ -19,25 +19,29 @@ tamamen cihaz üzerinde çalışan (offline-first) bir uygulama.
 
 ### `davaustasi` — Dava Ustası
 
-Hukuk temalı hibrit bir idle/simülasyon oyunu.
+Hukuk temalı, Sims tarzı bir kariyer yaşam simülasyonu.
 
-- **Idle katman**: Stajyer, kâtip, paralegal ve ortak avukat işe alıp
-  saniyede otomatik gelir (para) kazanırsınız; uygulama kapalıyken de
-  gelir birikir (offline ilerleme, azami 8 saat)
-- **Aktif dava simülasyonu**: Bir dava türü seçtiğinizde 5 aşamalı bir
-  duruşma akışı başlar — açılış → karşı tarafın iddiası → savunma
-  stratejiniz (agresif / dengeli / usul itirazı) → delil/tanık
-  sunumunuz (tanık ifadesi / belge / bilirkişi raporu) → karar. Her
-  seçiminizden sonra hakimin/salonun tepkisini gösteren anlık geri
-  bildirim var; seçimleriniz başarı şansınızı ve ödülü belirler.
-  Duruşma, hakim kürsüsü / tanık kürsüsü / savunma ve karşı taraf
-  masalarını gösteren şematik bir duruşma salonu sahnesinde geçer,
-  o an konuşan taraf vurgulanır.
-- İtibar puanı arttıkça yeni ve daha büyük dava türleri açılır
-  (Sulh Hukuk → İş Hukuku → Ticari → Ağır Ceza → Yargıtay)
-- **Kariyer/prestij sistemi**: Yeterli itibara ulaşınca "Kariyer
-  İlerlet" ile para ve kadronuzu sıfırlayıp kalıcı gelir çarpanı
-  (ünvan) kazanabilirsiniz (Stajyer Avukat → ... → Baro Başkanı)
+- **Karakter oluşturma**: İsminizi girip cilt tonu, saç rengi ve
+  kıyafet rengini seçerek kendi avukat karakterinizi yaratırsınız
+  (basit, özelleştirilebilir bir portre — Compose Canvas ile çizilir,
+  dış görsel/asset gerekmez)
+- **Günlük yaşam döngüsü**: Her gün Sabah / Öğlen / Akşam / Gece
+  olmak üzere 4 zaman dilimine bölünür; her dilimde Çalış, Dava Al,
+  Dinlen, Ders Çalış, Sosyalleş veya Uyu aktivitelerinden birini
+  seçersiniz. Her aktivite ikon kartlarıyla sunulur, uzun metin
+  diyalogları yoktur
+- **İstatistik yönetimi**: Enerji, Mutluluk ve Bilgi çubuklarını
+  dengede tutmanız gerekir; aktiviteler bu değerleri artırıp azaltır,
+  enerjiniz yetersizse bazı aktiviteler kapanır
+- **Konum sahnesi**: Karakteriniz o an bulunduğu yere (Ev / Ofis /
+  Mahkeme / Dışarısı) göre değişen, renk geçişleriyle animasyonlu bir
+  sahnede gösterilir
+- **Kariyer ilerlemesi**: Kariyer puanı biriktirdikçe otomatik olarak
+  terfi alırsınız (Hukuk Stajyeri → Avukat Yardımcısı → Avukat →
+  Kıdemli Avukat → Ortak Avukat → Baro Başkanı), her unvan "Çalış"
+  gelirinizi artırır
+- **Dava Al**: Avukat unvanına ulaştıktan sonra açılan riskli/yüksek
+  ödüllü bir aktivite; başarı şansı bilgi ve itibarınıza göre hesaplanır
 - Tüm ilerleme cihazda (DataStore) saklanır, internet gerekmez
 
 ## Teknoloji

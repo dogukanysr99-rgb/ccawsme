@@ -9,41 +9,39 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.ccawsme.davaustasi.data.GameRepository
-import com.ccawsme.davaustasi.ui.GameViewModel
+import com.ccawsme.davaustasi.data.KarakterRepository
+import com.ccawsme.davaustasi.ui.KarakterViewModel
 import com.ccawsme.davaustasi.ui.screens.AnaEkran
-import com.ccawsme.davaustasi.ui.screens.DavaEkrani
+import com.ccawsme.davaustasi.ui.screens.DavaSonucuDialog
+import com.ccawsme.davaustasi.ui.screens.KarakterOlusturmaEkrani
 import com.ccawsme.davaustasi.ui.theme.DavaUstasiTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val repository = GameRepository(applicationContext)
+        val repository = KarakterRepository(applicationContext)
 
         setContent {
             DavaUstasiTheme {
-                val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory(repository))
-                val durum by viewModel.gameState.collectAsState()
-                val aktifDava by viewModel.aktifDava.collectAsState()
+                val viewModel: KarakterViewModel = viewModel(factory = KarakterViewModel.Factory(repository))
+                val karakter by viewModel.karakter.collectAsState()
+                val guncelKonum by viewModel.guncelKonum.collectAsState()
+                val aktifDavaSonucu by viewModel.aktifDavaSonucu.collectAsState()
 
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    AnaEkran(
-                        durum = durum,
-                        onPersonelSatinAl = viewModel::personelSatinAl,
-                        onDavaBaslat = viewModel::davaBaslat,
-                        onKariyerIlerlet = viewModel::kariyerIlerlet
-                    )
-
-                    aktifDava?.let { surec ->
-                        DavaEkrani(
-                            surec = surec,
-                            onStratejiSec = viewModel::stratejiSec,
-                            onDelilSec = viewModel::delilSec,
-                            onDevamEt = viewModel::sonrakiAsamayaGec,
-                            onTamam = viewModel::davaSonucunuUygula,
-                            onKapat = viewModel::davaKapat
+                    if (!karakter.olusturuldu) {
+                        KarakterOlusturmaEkrani(onOlustur = viewModel::karakterOlustur)
+                    } else {
+                        AnaEkran(
+                            karakter = karakter,
+                            guncelKonum = guncelKonum,
+                            onAktiviteSec = viewModel::aktiviteUygula
                         )
+
+                        aktifDavaSonucu?.let { sonuc ->
+                            DavaSonucuDialog(sonuc = sonuc, onKapat = viewModel::davaSonucunuKapat)
+                        }
                     }
                 }
             }
