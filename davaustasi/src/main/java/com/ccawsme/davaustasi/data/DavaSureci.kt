@@ -10,7 +10,19 @@ data class DavaSonucu(
 
 data class DavaSureci(
     val davaTuru: DavaTuru,
+    val asama: DavaAsamasi = DavaAsamasi.ACILIS,
+    val karsiIddiaMetni: String = "",
     val secilenStrateji: Secenek? = null,
+    val stratejiTepkisi: String = "",
     val secilenDelil: Secenek? = null,
+    val delilTepkisi: String = "",
     val sonuc: DavaSonucu? = null
-)
+) {
+    fun aktifTaraf(): AktifTaraf = when (asama) {
+        DavaAsamasi.ACILIS -> AktifTaraf.HAKIM
+        DavaAsamasi.KARSI_IDDIA -> AktifTaraf.KARSI_TARAF
+        DavaAsamasi.STRATEJI -> AktifTaraf.SAVUNMA
+        DavaAsamasi.DELIL -> AktifTaraf.TANIK
+        DavaAsamasi.KARAR -> AktifTaraf.HAKIM
+    }
+}

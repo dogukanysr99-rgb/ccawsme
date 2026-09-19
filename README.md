@@ -24,11 +24,15 @@ Hukuk temalı hibrit bir idle/simülasyon oyunu.
 - **Idle katman**: Stajyer, kâtip, paralegal ve ortak avukat işe alıp
   saniyede otomatik gelir (para) kazanırsınız; uygulama kapalıyken de
   gelir birikir (offline ilerleme, azami 8 saat)
-- **Aktif dava simülasyonu**: Bir dava türü seçtiğinizde strateji
-  (agresif savunma / dengeli / usul itirazı) ve delil (tanık ifadesi /
-  belge / bilirkişi raporu) seçimi yaparsınız; bu seçimler başarı
-  şansınızı ve ödülü belirler, ardından dava sonuçlanır
-  (kazanma/kaybetme)
+- **Aktif dava simülasyonu**: Bir dava türü seçtiğinizde 5 aşamalı bir
+  duruşma akışı başlar — açılış → karşı tarafın iddiası → savunma
+  stratejiniz (agresif / dengeli / usul itirazı) → delil/tanık
+  sunumunuz (tanık ifadesi / belge / bilirkişi raporu) → karar. Her
+  seçiminizden sonra hakimin/salonun tepkisini gösteren anlık geri
+  bildirim var; seçimleriniz başarı şansınızı ve ödülü belirler.
+  Duruşma, hakim kürsüsü / tanık kürsüsü / savunma ve karşı taraf
+  masalarını gösteren şematik bir duruşma salonu sahnesinde geçer,
+  o an konuşan taraf vurgulanır.
 - İtibar puanı arttıkça yeni ve daha büyük dava türleri açılır
   (Sulh Hukuk → İş Hukuku → Ticari → Ağır Ceza → Yargıtay)
 - **Kariyer/prestij sistemi**: Yeterli itibara ulaşınca "Kariyer

@@ -3,13 +3,19 @@ package com.ccawsme.davaustasi.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.ccawsme.davaustasi.data.DavaAsamasi
 import com.ccawsme.davaustasi.data.DavaSonucu
 import com.ccawsme.davaustasi.data.DavaSureci
 import com.ccawsme.davaustasi.data.DavaTuru
+import com.ccawsme.davaustasi.data.DELIL_SECENEKLERI
 import com.ccawsme.davaustasi.data.GameRepository
 import com.ccawsme.davaustasi.data.GameState
 import com.ccawsme.davaustasi.data.PersonelRolu
+import com.ccawsme.davaustasi.data.STRATEJI_SECENEKLERI
 import com.ccawsme.davaustasi.data.Secenek
+import com.ccawsme.davaustasi.data.delilTepkisiUret
+import com.ccawsme.davaustasi.data.karsiIddiaUret
+import com.ccawsme.davaustasi.data.stratejiTepkisiUret
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -89,30 +95,49 @@ class GameViewModel(private val repository: GameRepository) : ViewModel() {
 
     fun davaBaslat(davaTuru: DavaTuru) {
         if (_gameState.value.enYuksekItibar < davaTuru.gerekliItibar) return
-        _aktifDava.value = DavaSureci(davaTuru = davaTuru)
+        _aktifDava.value = DavaSureci(davaTuru = davaTuru, asama = DavaAsamasi.ACILIS)
     }
 
     fun stratejiSec(secenek: Secenek) {
-        _aktifDava.value = _aktifDava.value?.copy(secilenStrateji = secenek)
+        val surec = _aktifDava.value ?: return
+        _aktifDava.value = surec.copy(secilenStrateji = secenek, stratejiTepkisi = stratejiTepkisiUret(secenek))
     }
 
     fun delilSec(secenek: Secenek) {
         val surec = _aktifDava.value ?: return
-        val strateji = surec.secilenStrateji ?: return
+        _aktifDava.value = surec.copy(secilenDelil = secenek, delilTepkisi = delilTepkisiUret(secenek))
+    }
+
+    fun sonrakiAsamayaGec() {
+        val surec = _aktifDava.value ?: return
+        _aktifDava.value = when (surec.asama) {
+            DavaAsamasi.ACILIS -> surec.copy(asama = DavaAsamasi.KARSI_IDDIA, karsiIddiaMetni = karsiIddiaUret())
+            DavaAsamasi.KARSI_IDDIA -> surec.copy(asama = DavaAsamasi.STRATEJI)
+            DavaAsamasi.STRATEJI -> if (surec.secilenStrateji != null) surec.copy(asama = DavaAsamasi.DELIL) else surec
+            DavaAsamasi.DELIL -> if (surec.secilenDelil != null) {
+                surec.copy(asama = DavaAsamasi.KARAR, sonuc = sonucHesapla(surec))
+            } else surec
+            DavaAsamasi.KARAR -> surec
+        }
+    }
+
+    private fun sonucHesapla(surec: DavaSureci): DavaSonucu {
+        val strateji = surec.secilenStrateji ?: STRATEJI_SECENEKLERI[1]
+        val delil = surec.secilenDelil ?: DELIL_SECENEKLERI[0]
         val guncelDurum = _gameState.value
 
         val basariSansi = (
             surec.davaTuru.zorluk +
                 strateji.basariEtkisi +
-                secenek.basariEtkisi +
+                delil.basariEtkisi +
                 guncelDurum.ortakBonusu() +
                 guncelDurum.deneyimBonusu()
             ).coerceIn(0.05, 0.95)
 
         val kazandi = Random.nextDouble() < basariSansi
 
-        val sonuc = if (kazandi) {
-            val carpan = strateji.oduleCarpan * secenek.oduleCarpan
+        return if (kazandi) {
+            val carpan = strateji.oduleCarpan * delil.oduleCarpan
             DavaSonucu(
                 kazandi = true,
                 basariSansi = basariSansi,
@@ -129,8 +154,6 @@ class GameViewModel(private val repository: GameRepository) : ViewModel() {
                 kazanilanDeneyim = surec.davaTuru.deneyimOdulu / 2
             )
         }
-
-        _aktifDava.value = surec.copy(secilenDelil = secenek, sonuc = sonuc)
     }
 
     fun davaSonucunuUygula() {

@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
                             surec = surec,
                             onStratejiSec = viewModel::stratejiSec,
                             onDelilSec = viewModel::delilSec,
+                            onDevamEt = viewModel::sonrakiAsamayaGec,
                             onTamam = viewModel::davaSonucunuUygula,
                             onKapat = viewModel::davaKapat
                         )
