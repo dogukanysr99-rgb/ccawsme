@@ -11,6 +11,7 @@ data class DavaSonucu(
 data class DavaSureci(
     val davaTuru: DavaTuru,
     val asama: DavaAsamasi = DavaAsamasi.ACILIS,
+    val olayMetni: String = "",
     val karsiIddiaMetni: String = "",
     val secilenStrateji: Secenek? = null,
     val stratejiTepkisi: String = "",

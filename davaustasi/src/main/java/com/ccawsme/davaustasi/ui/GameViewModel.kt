@@ -13,6 +13,7 @@ import com.ccawsme.davaustasi.data.GameState
 import com.ccawsme.davaustasi.data.PersonelRolu
 import com.ccawsme.davaustasi.data.STRATEJI_SECENEKLERI
 import com.ccawsme.davaustasi.data.Secenek
+import com.ccawsme.davaustasi.data.davaOlayiUret
 import com.ccawsme.davaustasi.data.delilTepkisiUret
 import com.ccawsme.davaustasi.data.karsiIddiaUret
 import com.ccawsme.davaustasi.data.stratejiTepkisiUret
@@ -95,7 +96,11 @@ class GameViewModel(private val repository: GameRepository) : ViewModel() {
 
     fun davaBaslat(davaTuru: DavaTuru) {
         if (_gameState.value.enYuksekItibar < davaTuru.gerekliItibar) return
-        _aktifDava.value = DavaSureci(davaTuru = davaTuru, asama = DavaAsamasi.ACILIS)
+        _aktifDava.value = DavaSureci(
+            davaTuru = davaTuru,
+            asama = DavaAsamasi.ACILIS,
+            olayMetni = davaOlayiUret(davaTuru)
+        )
     }
 
     fun stratejiSec(secenek: Secenek) {
