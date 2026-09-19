@@ -19,30 +19,27 @@ tamamen cihaz üzerinde çalışan (offline-first) bir uygulama.
 
 ### `davaustasi` — Dava Ustası
 
-Hukuk temalı, Sims tarzı bir kariyer yaşam simülasyonu.
+Hukuk büronuzu bir "imparatorluğa" dönüştürdüğünüz idle/tycoon
+simülasyonu (Mafia Life tarzı mekaniklerden esinlenilmiştir).
 
-- **Karakter oluşturma**: İsminizi girip cilt tonu, saç rengi ve
-  kıyafet rengini seçerek kendi avukat karakterinizi yaratırsınız
-  (basit, özelleştirilebilir bir portre — Compose Canvas ile çizilir,
-  dış görsel/asset gerekmez)
-- **Günlük yaşam döngüsü**: Her gün Sabah / Öğlen / Akşam / Gece
-  olmak üzere 4 zaman dilimine bölünür; her dilimde Çalış, Dava Al,
-  Dinlen, Ders Çalış, Sosyalleş veya Uyu aktivitelerinden birini
-  seçersiniz. Her aktivite ikon kartlarıyla sunulur, uzun metin
-  diyalogları yoktur
-- **İstatistik yönetimi**: Enerji, Mutluluk ve Bilgi çubuklarını
-  dengede tutmanız gerekir; aktiviteler bu değerleri artırıp azaltır,
-  enerjiniz yetersizse bazı aktiviteler kapanır
-- **Konum sahnesi**: Karakteriniz o an bulunduğu yere (Ev / Ofis /
-  Mahkeme / Dışarısı) göre değişen, renk geçişleriyle animasyonlu bir
-  sahnede gösterilir
-- **Kariyer ilerlemesi**: Kariyer puanı biriktirdikçe otomatik olarak
-  terfi alırsınız (Hukuk Stajyeri → Avukat Yardımcısı → Avukat →
-  Kıdemli Avukat → Ortak Avukat → Baro Başkanı), her unvan "Çalış"
-  gelirinizi artırır
-- **Dava Al**: Avukat unvanına ulaştıktan sonra açılan riskli/yüksek
-  ödüllü bir aktivite; başarı şansı bilgi ve itibarınıza göre hesaplanır
-- Tüm ilerleme cihazda (DataStore) saklanır, internet gerekmez
+- **Büro kurma**: Adınızı girip çevrimiçi (DiceBear) bir avatar
+  seçersiniz; avatar dilediğiniz an yeniden oluşturulabilir
+- **Idle gelir**: Saniyede otomatik para kazanırsınız; gelir, işe
+  aldığınız kadronuzun ve fethettiğiniz bölgelerin toplamından oluşur
+- **Büro kadro ağacı**: Siz liderin altında 3 ortak avukat, onların
+  altında da (ortak işe alındıktan sonra açılan) birer stajyer —
+  her biri avatarı, yaşı ve saniyelik geliriyle görünen bağlı bir
+  ağaç halinde
+- **Şehir haritası**: 6 bölgeyi (Kadıköy, Beşiktaş, Şişli, Üsküdar,
+  Bakırköy, Maltepe) müvekkil potansiyeli ve itibar eşiğine göre
+  parayla fethederek müvekkil sayınızı ve gelirinizi artırırsınız
+- **Olay kartları**: "Sonraki Gün"e bastığınızda portreli bir olay
+  kartı çıkar (müvekkil talebi, zam isteyen çalışan, gazeteci
+  röportajı vb.), her seçenek anlık para/itibar etkisi gösterir
+- **Üst HUD**: Para (+gelir/sn), itibar yüzdesi, toplam müvekkil
+  sayısı sürekli görünür; günde bir kez alınabilen günlük ödül var
+- İlerleme cihazda (DataStore) saklanır; avatarlar çevrimiçi
+  yüklendiği için uygulama internet erişimi ister
 
 ## Teknoloji
 

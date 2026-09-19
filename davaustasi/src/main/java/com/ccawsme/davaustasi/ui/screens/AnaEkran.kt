@@ -1,9 +1,6 @@
 package com.ccawsme.davaustasi.ui.screens
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,59 +8,50 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.FlashOn
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.TrendingUp
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.ccawsme.davaustasi.data.Aktivite
-import com.ccawsme.davaustasi.data.Karakter
-import com.ccawsme.davaustasi.data.Konum
-import com.ccawsme.davaustasi.data.uygunAktiviteler
+import com.ccawsme.davaustasi.data.Bolge
+import com.ccawsme.davaustasi.data.Imparatorluk
+import com.ccawsme.davaustasi.data.KadroUyesi
 import java.text.NumberFormat
 import java.util.Locale
 
-private val sayiFormati = NumberFormat.getIntegerInstance(Locale("tr", "TR"))
+private val fmt = NumberFormat.getIntegerInstance(Locale("tr", "TR"))
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnaEkran(karakter: Karakter, guncelKonum: Konum, onAktiviteSec: (Aktivite) -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(karakter.ad, fontWeight = FontWeight.Bold)
-                        Text(karakter.mevcutUnvan().ad, style = MaterialTheme.typography.bodySmall)
-                    }
-                }
-            )
-        }
-    ) { padding ->
+fun AnaEkran(
+    durum: Imparatorluk,
+    onIseAl: (KadroUyesi) -> Unit,
+    onFethet: (Bolge) -> Unit,
+    onGunlukOdul: () -> Unit,
+    onSonrakiGun: () -> Unit
+) {
+    var sekme by remember { mutableIntStateOf(0) }
+
+    Scaffold(topBar = { HudCubugu(durum) }) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -71,45 +59,31 @@ fun AnaEkran(karakter: Karakter, guncelKonum: Konum, onAktiviteSec: (Aktivite) -
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            Text(
-                "${karakter.gun}. Gün · ${karakter.zamanDilimi().etiket}",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            KonumSahnesi(konum = guncelKonum, karakter = karakter, modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(16.dp))
-
-            StatCubugu("Enerji", karakter.enerji, Icons.Filled.FlashOn)
-            StatCubugu("Mutluluk", karakter.mutluluk, Icons.Filled.Favorite)
-            StatCubugu("Bilgi", karakter.bilgi, Icons.Filled.School)
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                SayisalKart("Para", "${sayiFormati.format(karakter.para)} ₺", Icons.Filled.AttachMoney, Modifier.weight(1f))
-                SayisalKart("İtibar", sayiFormati.format(karakter.itibar), Icons.Filled.Star, Modifier.weight(1f))
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-
-            KariyerIlerlemesi(karakter)
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text("Bu zaman diliminde ne yapmak istersiniz?", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(10.dp))
-
-            val aktiviteler = uygunAktiviteler(karakter)
-            if (aktiviteler.isEmpty()) {
-                Text(
-                    "Şu an enerjiniz yetersiz. Dinlenmeyi deneyin.",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            } else {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    aktiviteler.forEach { aktivite ->
-                        AktiviteKarti(aktivite = aktivite, onClick = { onAktiviteSec(aktivite) })
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text("${durum.gun}. Gün", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.weight(1f))
+                if (durum.gunlukOdulAlinabilirMi()) {
+                    Button(onClick = onGunlukOdul) {
+                        Text("Günlük Ödül +${fmt.format(durum.gunlukOdulMiktari())} ₺")
                     }
                 }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(onClick = onSonrakiGun, modifier = Modifier.fillMaxWidth()) {
+                Text("Sonraki Gün")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TabRow(selectedTabIndex = sekme) {
+                Tab(selected = sekme == 0, onClick = { sekme = 0 }, text = { Text("Büro Kadrosu") })
+                Tab(selected = sekme == 1, onClick = { sekme = 1 }, text = { Text("Şehir Haritası") })
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (sekme == 0) {
+                KadroAgaci(durum = durum, onIseAl = onIseAl)
+            } else {
+                BolgeHaritasi(durum = durum, onFethet = onFethet)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -118,92 +92,30 @@ fun AnaEkran(karakter: Karakter, guncelKonum: Konum, onAktiviteSec: (Aktivite) -
 }
 
 @Composable
-private fun StatCubugu(etiket: String, deger: Int, ikon: ImageVector) {
-    val animasyonluDeger by animateFloatAsState(targetValue = deger / 100f, label = "stat_$etiket")
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+private fun HudCubugu(durum: Imparatorluk) {
+    Surface(tonalElevation = 2.dp) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(ikon, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(etiket, style = MaterialTheme.typography.bodyMedium)
-            }
-            Text("$deger", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        LinearProgressIndicator(
-            progress = { animasyonluDeger },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .clip(RoundedCornerShape(4.dp))
-        )
-    }
-}
-
-@Composable
-private fun SayisalKart(etiket: String, deger: String, ikon: ImageVector, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Icon(ikon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            Spacer(modifier = Modifier.width(8.dp))
-            Column {
-                Text(etiket, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(deger, fontWeight = FontWeight.Bold)
-            }
+            HudOgesi(Icons.Filled.AttachMoney, "${fmt.format(durum.para)} ₺", "+${durum.toplamGelirSaniye()}/sn")
+            HudOgesi(Icons.Filled.Star, "%${durum.itibarYuzdesi}", "İtibar")
+            HudOgesi(Icons.Filled.Group, fmt.format(durum.toplamMuvekkilSayisi()), "Müvekkil")
         }
     }
 }
 
 @Composable
-private fun KariyerIlerlemesi(karakter: Karakter) {
-    val sonraki = karakter.sonrakiUnvan()
-    Column(modifier = Modifier.fillMaxWidth()) {
+private fun HudOgesi(ikon: ImageVector, deger: String, altYazi: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Filled.TrendingUp, contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                if (sonraki != null) {
-                    "Sonraki unvan: ${sonraki.ad} (${sayiFormati.format(karakter.kariyerPuani)}/${sayiFormati.format(sonraki.gerekliKariyerPuani)})"
-                } else {
-                    "En üst unvana ulaştınız!"
-                },
-                style = MaterialTheme.typography.bodySmall
-            )
+            Icon(ikon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(deger, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
         }
-        if (sonraki != null) {
-            Spacer(modifier = Modifier.height(4.dp))
-            val ilerleme = (karakter.kariyerPuani.toFloat() / sonraki.gerekliKariyerPuani.toFloat()).coerceIn(0f, 1f)
-            LinearProgressIndicator(progress = { ilerleme }, modifier = Modifier.fillMaxWidth())
-        }
-    }
-}
-
-@Composable
-private fun AktiviteKarti(aktivite: Aktivite, onClick: () -> Unit) {
-    Card(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.padding(16.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(aktivite.ikon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(aktivite.etiket, fontWeight = FontWeight.Bold)
-                Text(
-                    aktivite.aciklama,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
+        Text(altYazi, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
