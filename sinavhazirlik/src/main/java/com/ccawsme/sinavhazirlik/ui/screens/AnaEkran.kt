@@ -18,8 +18,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -52,7 +54,8 @@ fun AnaEkran(
     onKonuSec: (String) -> Unit,
     onTumKartlar: () -> Unit,
     onTumQuiz: () -> Unit,
-    onTumDogruYanlis: () -> Unit
+    onTumDogruYanlis: () -> Unit,
+    onCikmisSorular: () -> Unit
 ) {
     Scaffold(topBar = { TopAppBar(title = { Text("Adli Yargı Hazırlık", fontWeight = FontWeight.Bold) }) }) { padding ->
         Column(
@@ -78,6 +81,9 @@ fun AnaEkran(
                 ModButonu("Mini\nTest", Icons.Filled.CheckCircle, Yesil40, onTumQuiz, Modifier.weight(1f))
                 ModButonu("Doğru /\nYanlış", Icons.Filled.ThumbUp, Turuncu40, onTumDogruYanlis, Modifier.weight(1f))
             }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CikmisSorularKarti(onClick = onCikmisSorular)
             Spacer(modifier = Modifier.height(24.dp))
 
             Text("Konular", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -114,6 +120,37 @@ private fun StreakKarti(streak: Int) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun CikmisSorularKarti(onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+    ) {
+        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Filled.Star, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Çıkmış Sorular", fontWeight = FontWeight.Bold)
+                Text(
+                    "Gerçek sınavlardan çıkmış sorularla çalış",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

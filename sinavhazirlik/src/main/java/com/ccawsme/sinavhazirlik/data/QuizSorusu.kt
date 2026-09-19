@@ -6,7 +6,9 @@ data class QuizSorusu(
     val soru: String,
     val secenekler: List<String>,
     val dogruIndex: Int,
-    val aciklama: String
+    val aciklama: String,
+    val yil: Int? = null,
+    val kaynak: String? = null
 )
 
 val QUIZ_SORULARI = listOf(
@@ -77,3 +79,9 @@ val QUIZ_SORULARI = listOf(
 
 fun quizSorulari(konuId: String?): List<QuizSorusu> =
     if (konuId == null) QUIZ_SORULARI else QUIZ_SORULARI.filter { it.konuId == konuId }
+
+fun cikmisSorular(yil: Int? = null): List<QuizSorusu> =
+    QUIZ_SORULARI.filter { it.yil != null && (yil == null || it.yil == yil) }
+
+fun cikmisYillar(): List<Int> =
+    QUIZ_SORULARI.mapNotNull { it.yil }.distinct().sortedDescending()

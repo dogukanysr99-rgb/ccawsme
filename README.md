@@ -53,6 +53,9 @@ uygulaması.
   yanlış renklendirmesi ve kısa açıklama gösterir
 - **Doğru / Yanlış**: Hızlı ifade bazlı quiz, anlık geri bildirim ve
   açıklama ile
+- **Çıkmış Sorular**: Gerçek geçmiş sınavlardan çıkan sorular, yıla göre
+  filtrelenebilir; siz kaynakları gönderdikçe dolduracağımız bir bölüm
+  (şu an altyapısı hazır, içerik bekliyor — uydurma soru eklenmedi)
 - **Konular**: Anayasa Hukuku, Medeni Hukuk, Ceza Hukuku (örnek
   içerik — gerçek ders notlarınızla değiştirilebilir/genişletilebilir)
 - **Panel**: Günlük çalışma serisi (streak), quiz ve doğru/yanlış

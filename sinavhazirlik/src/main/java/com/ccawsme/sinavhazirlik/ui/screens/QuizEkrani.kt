@@ -80,6 +80,16 @@ fun QuizEkrani(
             )
             Spacer(modifier = Modifier.height(20.dp))
 
+            if (oturum.cikmisMi && soru.yil != null) {
+                Text(
+                    "${soru.yil} Sınavı" + (soru.kaynak?.let { " · $it" } ?: ""),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.secondary,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+            }
+
             Text(soru.soru, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(20.dp))
 

@@ -19,6 +19,7 @@ import com.ccawsme.sinavhazirlik.data.IlerlemeRepository
 import com.ccawsme.sinavhazirlik.ui.SinavViewModel
 import com.ccawsme.sinavhazirlik.ui.screens.AnaEkran
 import com.ccawsme.sinavhazirlik.ui.screens.BilgiKartlariEkrani
+import com.ccawsme.sinavhazirlik.ui.screens.CikmisSorularEkrani
 import com.ccawsme.sinavhazirlik.ui.screens.DogruYanlisEkrani
 import com.ccawsme.sinavhazirlik.ui.screens.KonuDetayEkrani
 import com.ccawsme.sinavhazirlik.ui.screens.QuizEkrani
@@ -44,8 +45,40 @@ class MainActivity : ComponentActivity() {
                                 onKonuSec = { id -> navController.navigate("konu/$id") },
                                 onTumKartlar = { navController.navigate("kartlar/tumu") },
                                 onTumQuiz = { navController.navigate("quiz/tumu") },
-                                onTumDogruYanlis = { navController.navigate("dogruyanlis/tumu") }
+                                onTumDogruYanlis = { navController.navigate("dogruyanlis/tumu") },
+                                onCikmisSorular = { navController.navigate("cikmis") }
                             )
+                        }
+                        composable("cikmis") {
+                            CikmisSorularEkrani(
+                                onYilSec = { yil ->
+                                    navController.navigate("cikmis-quiz/${yil ?: 0}")
+                                },
+                                onGeri = { navController.popBackStack() }
+                            )
+                        }
+                        composable(
+                            "cikmis-quiz/{yil}",
+                            arguments = listOf(navArgument("yil") { type = NavType.IntType })
+                        ) { backStackEntry ->
+                            val yilArg = backStackEntry.arguments?.getInt("yil") ?: 0
+                            val yil = if (yilArg == 0) null else yilArg
+                            LaunchedEffect(yil) {
+                                viewModel.quizBaslatCikmis(yil)
+                            }
+                            val oturum by viewModel.quizOturumu.collectAsState()
+                            oturum?.let {
+                                QuizEkrani(
+                                    oturum = it,
+                                    onCevapSec = viewModel::quizCevaplaSec,
+                                    onSonraki = viewModel::quizSonrakiSoru,
+                                    onTekrarBaslat = { viewModel.quizBaslatCikmis(yil) },
+                                    onGeri = {
+                                        viewModel.quizKapat()
+                                        navController.popBackStack()
+                                    }
+                                )
+                            }
                         }
                         composable(
                             "konu/{konuId}",

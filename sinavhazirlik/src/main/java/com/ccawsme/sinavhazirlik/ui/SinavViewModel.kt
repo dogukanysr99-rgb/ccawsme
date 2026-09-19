@@ -7,6 +7,7 @@ import com.ccawsme.sinavhazirlik.data.DogruYanlisSorusu
 import com.ccawsme.sinavhazirlik.data.Ilerleme
 import com.ccawsme.sinavhazirlik.data.IlerlemeRepository
 import com.ccawsme.sinavhazirlik.data.QuizSorusu
+import com.ccawsme.sinavhazirlik.data.cikmisSorular
 import com.ccawsme.sinavhazirlik.data.dogruYanlisSorulari
 import com.ccawsme.sinavhazirlik.data.quizSorulari
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ data class QuizOturumu(
     val index: Int = 0,
     val secilenIndex: Int? = null,
     val dogruSayisi: Int = 0,
-    val bitti: Boolean = false
+    val bitti: Boolean = false,
+    val cikmisMi: Boolean = false
 )
 
 data class DysOturumu(
@@ -71,6 +73,10 @@ class SinavViewModel(private val repository: IlerlemeRepository) : ViewModel() {
 
     fun quizBaslat(konuId: String?) {
         _quizOturumu.value = QuizOturumu(sorular = quizSorulari(konuId).shuffled())
+    }
+
+    fun quizBaslatCikmis(yil: Int?) {
+        _quizOturumu.value = QuizOturumu(sorular = cikmisSorular(yil).shuffled(), cikmisMi = true)
     }
 
     fun quizCevaplaSec(secilenIndex: Int) {
